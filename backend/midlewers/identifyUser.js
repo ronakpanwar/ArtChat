@@ -1,17 +1,17 @@
 
 
 var jwt = require('jsonwebtoken');
-const JWT_TOKEN = "ARTCHAT-byRP";
+
 
 const identifyUser = (req,res,next)=>{
-    const token = req.header('auth-token');
+    const token = req.cookies.token;
     if(!token){
         res.status(401).send({ error: "authanticate with valid user token" })
     }
     try {
 
-        const data = jwt.verify(token , JWT_TOKEN);
-        req.user = data.user;
+        const data = jwt.verify(token , process.env.JWT_TOKEN);
+        req.id = data.userId;
         // console.log(data.user.id);
         next();
         

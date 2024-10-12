@@ -17,10 +17,15 @@ const postSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    likes:{
-        type:String,
-        default:'0',
-    },
+    likes:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'likes',
+    }],
+    comments:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'comments',
+    }
+    ],
     date:{
         type:Date,
         default:Date.now
