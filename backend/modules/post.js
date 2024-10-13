@@ -17,9 +17,14 @@ const postSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    background:{
+       type:String,
+       default:"white",
+       enum:["white","blue" , "red", "chex"]
+    },
     likes:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'likes',
+        ref:'users',
     }],
     comments:[{
       type:mongoose.Schema.Types.ObjectId,

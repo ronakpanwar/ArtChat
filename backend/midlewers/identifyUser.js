@@ -3,8 +3,8 @@
 var jwt = require('jsonwebtoken');
 
 
-const identifyUser = (req,res,next)=>{
-    const token = req.cookies.token;
+const identifyUser =async (req,res,next)=>{
+    const token = await req.cookies.token;
     if(!token){
         res.status(401).send({ error: "authanticate with valid user token" })
     }

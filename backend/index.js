@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 const userRouter = require('./routes/user');
 const postRouter = require('./routes/post');
 const CommentRouter = require('./routes/comment');
-const PORT = 4000;
+
 
 const dotenv = require('dotenv')
 dotenv.config({});
@@ -20,6 +20,7 @@ dotenv.config({});
 
 
 const app = express();
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); // Increase the limit
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -30,6 +31,8 @@ app.use('/api/user' , userRouter);
 app.use('/api/post' , postRouter);
 app.use('/api/comment', CommentRouter)
 
+
+const PORT = 4000;
 
 app.listen(PORT , ()=> {
     connectMongo()
