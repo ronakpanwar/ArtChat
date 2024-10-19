@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const { identifyUser } = require('../midlewers/identifyUser');
-const { register, login, takeProfileById, updateProfile } = require('../controller/user.controller');
+const { register, login, takeProfileById, updateProfile, logout } = require('../controller/user.controller');
 
 
 const router = Router();
@@ -42,6 +42,8 @@ router.post('/login' , login)
 
 
 router.post('/update', identifyUser, upload.single('img'), updateProfile);
+
+router.get('/logout'  , logout)
 
 
 

@@ -5,9 +5,15 @@ import {
   Button,
   Typography,
 } from '@material-tailwind/react';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 
 const SignUp = () => {
+
+   const navigate = useNavigate();
+
     const [data, setData] = useState({
         name:"",
         email: '',
@@ -24,9 +30,22 @@ const SignUp = () => {
     
       const handleSubmit = async (e) => {
         e.preventDefault();
-       
-        // Handle signup logic here (API call)
-        alert(`Email: ${data.email}, Password: ${data.password}`);
+        try {
+          const res = await axios.post('http://localhost:4000/api/user/add-user',data , {
+            headers:{
+              'Content-Type':"application/json"
+            },
+            withCredentials:true
+          })
+          if(res.data.success){
+            
+            toast.success(res.data.message)
+            navigate('/signin')
+          }
+        } catch (error) {
+          toast.error(error.response.data.message)
+        }
+   
       };
     
   return (

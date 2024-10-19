@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import {
   Card,
   Input,
@@ -24,12 +25,27 @@ const SignIn = () => {
      
       const handleSubmit = async(e)=>{
         e.preventDefault(); 
-       toast.success(data.email)
+        try {
+          const res = await axios.post('http://localhost:4000/api/user/login',data , {
+            headers:{
+              'Content-Type':"application/json"
+            },
+            withCredentials:true
+          })
+          if(res.data.success){
+           
+            toast.success(res.data.message)
+          }
+        } catch (error) {
+          toast.error(error.response.data.message)
+        }
+       
       }
 
   return (
     <>
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-teal-400 to-cyan-600">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-teal-400 to-cyan-600">
+ 
       <Card className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
         <Typography
           variant="h3"

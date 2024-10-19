@@ -22,7 +22,9 @@ const path = require('path');
         //  cheak if user exsists ?
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+            return res.status(400).json({ message: 'User already exists',
+               success:false
+             });
         }
         
     //    Hash the password
@@ -129,10 +131,23 @@ const updateProfile = async (req, res) => {
     }
  }  
 
+ const logout = async(req,res)=>{
+   try {
+        return res.status(200).cookie('token' ,'' ,{maxAge:0}).json({
+           message:'You Logged Out Successfully..',
+           success:true
+        })
+
+   } catch (error) {
+       console.log(error) 
+   }
+}
+
 
 module.exports = {
     register,
     login ,
     takeProfileById,
-    updateProfile
+    updateProfile,
+    logout
 }
