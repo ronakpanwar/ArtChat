@@ -25,7 +25,7 @@ const Home = () => {
       </nav>
 
 
-      <main className="flex-grow flex flex-col items-center justify-center bg-gray-50 px-4 py-12">
+      <main className="min-h-dvh flex-grow flex flex-col items-center justify-center bg-gray-50 px-4 py-12">
         <div className="text-center max-w-2xl">
           <h1 className="text-4xl font-bold text-gray-900 mb-6">
             Welcome to <span className="text-[#48CFCB]">ArtChat</span>
