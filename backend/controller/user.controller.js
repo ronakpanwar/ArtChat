@@ -63,15 +63,21 @@ const login = async (req, res) => {
     }
  
     const { email, password } = req.body;
+    if(!email || !password ){
+      res.status(400).json({
+         success:false,
+         message:'Somthing missing...'
+      })
+    }
     try {
        let user = await User.findOne({ email });
        if (!user) {
-          return res.status(400).json({ sucsess:false, errors: 'plese enter the correct Email' });
+          return res.status(400).json({ sucsess:false, message: 'plese enter the correct Email' });
        }
  
        const passwordcode = await bcrypt.compare(password, user.password);
        if (!passwordcode) {
-          return res.status(400).json({ sucsess:false, errors: 'plese enter the correct Password' });
+          return res.status(400).json({ sucsess:false, message:'plese enter the correct Password' });
        }
  
        const data = {
@@ -80,6 +86,7 @@ const login = async (req, res) => {
  
        const authToken = jwt.sign(data, process.env.JWT_TOKEN);
        
+   
    
        return res.status(201).cookie('token',authToken , {maxAge:1*24*60*60*1000 , sameSite:'strict'}).json({
          message:`wellcome back ${user.name}..`,

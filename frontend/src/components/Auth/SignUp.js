@@ -8,11 +8,16 @@ import {
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Spinner } from "@material-tailwind/react";
+import { setLoading } from '../../Redux/authSlice';
 
 
 const SignUp = () => {
-
+   const dispatch = useDispatch();
+   const {loading} = useSelector(store=>store.auth)
    const navigate = useNavigate();
+
 
     const [data, setData] = useState({
         name:"",
@@ -31,6 +36,7 @@ const SignUp = () => {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+          dispatch(setLoading(true));
           const res = await axios.post('http://localhost:4000/api/user/add-user',data , {
             headers:{
               'Content-Type':"application/json"
@@ -44,6 +50,8 @@ const SignUp = () => {
           }
         } catch (error) {
           toast.error(error.response.data.message)
+        }finally{
+          dispatch(setLoading(false))
         }
    
       };
@@ -91,7 +99,14 @@ const SignUp = () => {
           className=""
           required
         />
-     
+     {
+      loading ? <Button
+          fullWidth
+          className="flex gap-4 items-center justify-center  bg-gradient-to-r from-purple-400 to-pink-600 text-white font-bold"
+          type="submit"
+        >
+         <Spinner/> please Wait ....
+        </Button>:
         <Button
           fullWidth
           className="bg-gradient-to-r from-purple-400 to-pink-600 text-white font-bold"
@@ -99,6 +114,8 @@ const SignUp = () => {
         >
           Sign Up
         </Button>
+     }
+        
         <Typography className="text-center text-gray-500 mt-4">
           Already have an account? <a href="/signin" className="text-pink-500">Sign In</a>
         </Typography>

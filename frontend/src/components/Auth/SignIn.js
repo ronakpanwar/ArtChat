@@ -5,10 +5,17 @@ import {
   Input,
   Button,
   Typography,
+  Spinner,
 } from '@material-tailwind/react';
 import {  toast } from 'sonner'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoading , setUser } from '../../Redux/authSlice';
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const {loading} = useSelector(store=>store.auth)
+  const navigate = useNavigate();
 
       const [data , setData] = useState({
         email:"",
@@ -26,6 +33,7 @@ const SignIn = () => {
       const handleSubmit = async(e)=>{
         e.preventDefault(); 
         try {
+          dispatch(setLoading(true))
           const res = await axios.post('http://localhost:4000/api/user/login',data , {
             headers:{
               'Content-Type':"application/json"
@@ -33,11 +41,14 @@ const SignIn = () => {
             withCredentials:true
           })
           if(res.data.success){
-           
+            dispatch(setUser(res.data.user))
+            navigate('/mainpage')
             toast.success(res.data.message)
           }
         } catch (error) {
           toast.error(error.response.data.message)
+        }finally{
+          dispatch(setLoading(false))
         }
        
       }
@@ -65,6 +76,7 @@ const SignIn = () => {
             onChange={handleChange}
             placeholder="Enter your email"
             className=""
+            required
           />
           <Input
             type="password"
@@ -75,14 +87,24 @@ const SignIn = () => {
             onChange={handleChange}
             placeholder="Enter your password"
             className=""
+            required
           />
-          <Button
-            fullWidth
-            type='submit'
-            className="bg-gradient-to-r from-teal-400 to-cyan-600 text-white font-bold"
-          >
-            Sign In
-          </Button>
+            {
+      loading ? <Button
+          fullWidth
+          className="flex gap-4 items-center justify-center  bgbg-gradient-to-r from-teal-400 to-cyan-600 text-white font-bold"
+          type="submit"
+        >
+         <Spinner/> please Wait ....
+        </Button>:
+        <Button
+          fullWidth
+          className="bg-gradient-to-r from-teal-400 to-cyan-600 text-white font-bold"
+          type="submit"
+        >
+          Sign In
+        </Button>
+     }
           <div className="flex justify-between items-center mt-4">
             <Typography className="text-sm">
               Don’t have an account? <a href="/signup" className="text-cyan-500">Sign Up</a>
